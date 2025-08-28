@@ -1,0 +1,101 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mb-4">
+        <i class="fas fa-file-powerpoint text-primary"></i>
+        PowerPoint Presentation Generator
+      </h2>
+      
+      <!-- File Name Input -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Presentation Settings</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="fileName" class="form-label">File Name:</label>
+              <div class="input-group">
+                <input 
+                  type="text" 
+                  id="fileName"
+                  class="form-control" 
+                  [(ngModel)]="fileName"
+                  placeholder="Enter presentation name">
+                <span class="input-group-text">.pptx</span>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <button 
+                class="btn btn-success me-2"
+                (click)="generatePPT()"
+                [disabled]="isGenerating || slides.length === 0">
+                <span *ngIf="isGenerating" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="fas fa-download" *ngIf="!isGenerating"></i>
+                {{ isGenerating ? 'Generating...' : 'Generate PPT' }}
+              </button>
+              <button 
+                class="btn btn-secondary"
+                (click)="loadSampleSlides()">
+                <i class="fas fa-refresh"></i>
+                Load Sample
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slides Management -->
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Slides ({{ slides.length }})</h5>
+          <button class="btn btn-primary btn-sm" (click)="addSlide()">
+            <i class="fas fa-plus"></i>
+            Add Slide
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="slides.length === 0" class="text-center text-muted py-4">
+            <i class="fas fa-file-powerpoint fa-3x mb-3"></i>
+            <p>No slides added yet. Click "Add Slide" or "Load Sample" to get started.</p>
+          </div>
+          
+          <div *ngFor="let slide of slides; let i = index; trackBy: trackByIndex" class="slide-editor mb-4">
+            <div class="card border-left-primary">
+              <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <span class="fw-bold">Slide {{ i + 1 }}</span>
+                <button 
+                  class="btn btn-outline-danger btn-sm" 
+                  (click)="removeSlide(i)"
+                  [disabled]="slides.length <= 1">
+                  <i class="fas fa-trash"></i>
+                  Remove
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label [for]="'title-' + i" class="form-label">Slide Title:</label>
+                  <input 
+                    type="text" 
+                    [id]="'title-' + i"
+                    class="form-control" 
+                    [(ngModel)]="slide.title"
+                    placeholder="Enter slide title">
+                </div>
+                <div class="mb-3">
+                  <label [for]="'content-' + i" class="form-label">Slide Content:</label>
+                  <textarea 
+                    [id]="'content-' + i"
+                    class="form-control" 
+                    rows="4"
+                    [(ngModel)]="slide.content"
+                    placeholder="Enter slide content (use • for bullet points)"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
